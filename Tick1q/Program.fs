@@ -1,13 +1,59 @@
 ﻿open System
 
 //------------------------write your answer function(s) here---------------------//
-
+let pow (x: float) n = 
+    if n = 0 then
+        1.0
+    else
+        let xList = List.map (fun a -> x) [1..n]
+        List.reduce (*) xList
 // top-level subfunctions of polarToCartesianApprox (if any)
+
+let fact n = 
+    if n = 0 then 
+        1.0
+    else 
+        List.reduce (*) [1..n]
+
+let taylor (x:float) n = 
+    (pow x n) / (fact n)
+
+let tList (x:float) n = 
+    let xTaylor a = 
+        taylor x a
+    List.map xTaylor n
+
+let sList l=
+    let isEven x = (x%2)=0
+    List.mapi (fun i (x:float) -> if isEven i then x else -x) l
+
+let aSin x n =
+    if n = 0 then 
+        0.0
+    else
+        let nList = 
+            [1..2..n]
+            |> tList x 
+            |> sList 
+        List.reduce (fun a b -> a + b) nList
+
+let aCos x n =
+    if n = 0 then 
+        1.0
+    else
+        let nList = 
+            [0..2..n]
+            |> tList x 
+            |> sList
+        List.reduce (fun a b -> a + b) nList
+
 
 /// answer to Tick1
 // the header given here is correct.
 let polarToCartesianApprox (r,theta) n = 
-    failwithf "Tick1 not yet implemented" // replace this line with your top-level implementation
+    let x = r * aCos theta n
+    let y = r * aSin theta n  
+    x,y
 
 
 //--------------------testbench code - DO NOT CHANGE-----------------------------//
